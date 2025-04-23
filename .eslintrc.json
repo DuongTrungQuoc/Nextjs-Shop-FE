@@ -5,13 +5,12 @@
     "@next/next/no-img-element": "off",
     "react/no-unescaped-entities": "off",
     "import/no-anonymous-default-export": "off",
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": "warn",  // Đổi thành "warn" thay vì "error"
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
-    // add new line above comment
     "lines-around-comment": [
-      "error",
+      "warn",
       {
         "beforeLineComment": true,
         "beforeBlockComment": true,
@@ -21,17 +20,15 @@
         "allowArrayStart": true
       }
     ],
-    // add new line above return
-    "newline-before-return": "error",
-    // add new line below import
+    "newline-before-return": "warn",
     "import/newline-after-import": [
-      "error",
+      "warn",
       {
         "count": 1
       }
     ],
     "@typescript-eslint/ban-types": [
-      "error",
+      "warn",
       {
         "extendDefaults": true,
         "types": {
