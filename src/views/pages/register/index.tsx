@@ -227,7 +227,7 @@ const RegisterPage: NextPage<TProps> = () => {
               <Link
                 href='/login'
                 style={{
-                  color: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white
+                  color: theme.palette.primary.main
                 }}
               >
                 {'Login'}

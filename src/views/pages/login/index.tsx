@@ -194,7 +194,14 @@ const LoginPage: NextPage<TProps> = () => {
                 }
                 label='Remember me'
               />
-              <Link href='#'>Forgot password?</Link>
+              <Link
+                href='#'
+                style={{
+                  color: theme.palette.primary.main
+                }}
+              >
+                Forgot password?
+              </Link>
             </Box>
 
             <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
@@ -206,7 +213,7 @@ const LoginPage: NextPage<TProps> = () => {
               <Link
                 href='/register'
                 style={{
-                  color: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white
+                  color: theme.palette.primary.main
                 }}
               >
                 {'Register'}
