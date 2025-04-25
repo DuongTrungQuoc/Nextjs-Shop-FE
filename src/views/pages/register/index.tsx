@@ -224,7 +224,14 @@ const RegisterPage: NextPage<TProps> = () => {
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
               <Typography>{'Do you have already account?'}</Typography>
 
-              <Link href='/login'>{'Login'}</Link>
+              <Link
+                href='/login'
+                style={{
+                  color: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white
+                }}
+              >
+                {'Login'}
+              </Link>
             </Box>
             <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>Or</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
