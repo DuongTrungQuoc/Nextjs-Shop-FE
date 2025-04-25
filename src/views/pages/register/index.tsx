@@ -31,7 +31,7 @@ type TDefaultValue = {
   password: string
   confirmPassword: string
 }
-const LoginPage: NextPage<TProps> = () => {
+const RegisterPage: NextPage<TProps> = () => {
   //State
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -70,7 +70,7 @@ const LoginPage: NextPage<TProps> = () => {
 
   //console.log('error login', { errors })
   const onSubmit = (data: { email: string; password: string }) => {
-    console.log('data login', { data })
+    console.log('data register', { data })
   }
 
   return (
@@ -85,7 +85,7 @@ const LoginPage: NextPage<TProps> = () => {
     >
       <Box
         display={{
-          md: 'flex',
+          sm: 'flex',
           xs: 'none'
         }}
         sx={{
@@ -93,12 +93,14 @@ const LoginPage: NextPage<TProps> = () => {
           justifyContent: 'center',
           backgroundColor: theme.palette.customColors.bodyBg,
           height: '100%',
-          maxWidth: '50vw'
+          maxWidth: '50vw',
+          overflow: 'hidden'
         }}
       >
         <Image
           src={theme.palette.mode === 'light' ? RegisterLight : RegisterDark}
-          alt='login image'
+          alt='register image'
+          priority // Nếu đây là hình ảnh quan trọng, có thể thêm thuộc tính này để tải trước
           style={{
             height: '100%',
             width: 'auto'
@@ -236,6 +238,6 @@ const LoginPage: NextPage<TProps> = () => {
   )
 }
 
-export default LoginPage
+export default RegisterPage
 
 // https://github.com/mui/material-ui/blob/v5.17.1/docs/data/material/getting-started/templates/sign-in/SignIn.tsx

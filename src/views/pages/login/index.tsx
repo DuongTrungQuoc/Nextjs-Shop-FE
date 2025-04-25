@@ -86,7 +86,7 @@ const LoginPage: NextPage<TProps> = () => {
     >
       <Box
         display={{
-          md: 'flex',
+          sm: 'flex',
           xs: 'none'
         }}
         sx={{
@@ -94,12 +94,14 @@ const LoginPage: NextPage<TProps> = () => {
           justifyContent: 'center',
           backgroundColor: theme.palette.customColors.bodyBg,
           height: '100%',
-          maxWidth: '50vw'
+          maxWidth: '50vw',
+          overflow: 'hidden'
         }}
       >
         <Image
           src={theme.palette.mode === 'light' ? LoginLight : LoginDark}
           alt='login image'
+          priority // Nếu đây là hình ảnh quan trọng, có thể thêm thuộc tính này để tải trước
           style={{
             height: '100%',
             width: 'auto'
