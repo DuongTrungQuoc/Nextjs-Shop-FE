@@ -2,8 +2,9 @@
 import { Box, useTheme } from '@mui/material'
 import axios from 'axios'
 import Head from 'next/head'
-import { useEffect } from 'react'
+import { ReactNode, useEffect } from 'react'
 import CustomTextField from 'src/components/text-field'
+import LayoutNotApp from 'src/views/layouts/LayoutNotApp'
 
 export default function Home() {
   // test gọi api lấy danh sách user
@@ -40,3 +41,5 @@ export default function Home() {
     </>
   )
 }
+
+Home.getLayout = (pages: ReactNode) => <LayoutNotApp>{pages}</LayoutNotApp>
