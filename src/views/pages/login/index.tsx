@@ -35,6 +35,9 @@ import { EMAIL_REG, PASSWORD_REG } from 'src/configs/regex'
 import LoginDark from '/public/images/yugioh/marik-login-dark.png'
 import LoginLight from '/public/images/yugioh/yugi-login-light.png'
 
+// ** hook
+import { useAuth } from 'src/hooks/useAuth'
+
 type TProps = {}
 type TDefaultValue = {
   email: string
@@ -44,6 +47,9 @@ const LoginPage: NextPage<TProps> = () => {
   //State
   const [showPassword, setShowPassword] = useState(false)
   const [isRemember, setIsRemember] = useState(true)
+
+  // ** context
+  const { login } = useAuth()
 
   // ** theme
   const theme = useTheme()
@@ -69,9 +75,12 @@ const LoginPage: NextPage<TProps> = () => {
     resolver: yupResolver(schema)
   })
 
-  //console.log('error login', { errors })
   const onSubmit = (data: { email: string; password: string }) => {
-    console.log('data login', { data })
+    if (!Object.keys(errors)?.length) {
+      login({ ...data, rememberMe: isRemember })
+    }
+
+    console.log('data login', { data, errors })
   }
 
   return (
