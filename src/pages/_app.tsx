@@ -81,8 +81,10 @@ export default function App(props: ExtendedAppProps) {
 
   const setConfig = Component.setConfig ?? undefined
 
+  // Những page mà user **đăng nhập rồi thì mới vào được**
   const authGuard = Component.authGuard ?? true
 
+  //  // Những page mà user **chưa đăng nhập thì được vào**, **đã đăng nhập thì không vào được**
   const guestGuard = Component.guestGuard ?? false
 
   const aclAbilities = Component.acl ?? defaultACLObj

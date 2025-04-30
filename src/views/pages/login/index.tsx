@@ -62,8 +62,8 @@ const LoginPage: NextPage<TProps> = () => {
       .matches(PASSWORD_REG, 'The password is contain character, special character, number')
   })
   const defaultValues: TDefaultValue = {
-    email: '',
-    password: ''
+    email: 'adminquoc@gmail.com',
+    password: 'Quoc2002@'
   }
   const {
     handleSubmit,

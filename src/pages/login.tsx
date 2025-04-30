@@ -15,3 +15,5 @@ const Login: NextPage<TProps> = () => {
 export default Login
 
 Login.getLayout = (pages: ReactNode) => <BlankLayout>{pages}</BlankLayout>
+
+Login.guestGuard = true
