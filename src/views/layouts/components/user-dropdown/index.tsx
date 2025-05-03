@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 
 // ** components
-import IconifyIcon from '../Icon'
+import IconifyIcon from 'src/components/Icon'
 
 // ** hook
 import { useAuth } from 'src/hooks/useAuth'
