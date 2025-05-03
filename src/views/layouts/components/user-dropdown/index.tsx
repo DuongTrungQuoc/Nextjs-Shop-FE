@@ -21,9 +21,15 @@ import IconifyIcon from 'src/components/Icon'
 // ** hook
 import { useAuth } from 'src/hooks/useAuth'
 
+// ** i18n
+import { useTranslation } from 'react-i18next'
+
 type TProps = {}
 
 const UserDropDown = (props: TProps) => {
+  // ** Translation
+  const { t } = useTranslation()
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
   const { user, logout } = useAuth()
@@ -39,7 +45,7 @@ const UserDropDown = (props: TProps) => {
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        <Tooltip title='Account'>
+        <Tooltip title={t('Account')}>
           <IconButton
             onClick={handleClick}
             size='small'
