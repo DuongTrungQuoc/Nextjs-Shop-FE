@@ -15,3 +15,5 @@ const Register: NextPage<TProps> = () => {
 export default Register
 
 Register.getLayout = (pages: ReactNode) => <BlankLayout>{pages}</BlankLayout>
+
+Register.guestGuard = true
