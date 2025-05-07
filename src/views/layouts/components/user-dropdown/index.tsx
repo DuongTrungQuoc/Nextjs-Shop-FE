@@ -23,6 +23,8 @@ import { useAuth } from 'src/hooks/useAuth'
 
 // ** i18n
 import { useTranslation } from 'react-i18next'
+import { useRouter } from 'next/router'
+import { ROUTE_CONFIG } from 'src/configs/route'
 
 type TProps = {}
 
@@ -35,11 +37,19 @@ const UserDropDown = (props: TProps) => {
   const { user, logout } = useAuth()
 
   const open = Boolean(anchorEl)
+
+  const router = useRouter()
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleNavigateMyProfile = () => {
+    router.push(`/${ROUTE_CONFIG.MY_PROFILE}`)
+    handleClose()
   }
 
   return (
@@ -107,11 +117,8 @@ const UserDropDown = (props: TProps) => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={handleClose}>{user?.email}</MenuItem>
-        <MenuItem onClick={handleClose}>
-          {user?.firstName} {user?.middleName} {user?.lastName}
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar /> Profile
+        <MenuItem onClick={handleNavigateMyProfile}>
+          <Avatar /> {t('my_profile')}
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <Avatar /> My account
