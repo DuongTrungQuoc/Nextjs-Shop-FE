@@ -1,3 +1,19 @@
 {
-  "Account": "Tài khoản"
+  "Account": "Tài khoản",
+  "my_profile": "Hồ sơ của tôi",
+  "enter_your_email": "Nhập email của bạn",
+  "Role": "Vai trò",
+  "enter_your_role": "Chọn vai trò của bạn",
+  "Full_name": "Họ và tên",
+  "enter_your_full_name": "Nhập họ và tên của bạn",
+  "Address": "Địa chỉ",
+  "enter_your_address": "Nhập địa chỉ của bạn",
+  "City": "Thành phố",
+  "enter_your_city": "Nhập thành phố của bạn",
+  "Phone_number": "Số điện thoại",
+  "enter_your_phone_number": "Nhập số điện thoại của bạn",
+  "upload_avatar": "Tải lên ảnh đại diện",
+  "change_avatar": "Thay đổi ảnh đại diện",
+  "Update": "Cập nhật"
+
 }

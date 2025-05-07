@@ -1,9 +1,8 @@
 'use client'
-import { Box, useTheme } from '@mui/material'
+import { useTheme } from '@mui/material'
 import axios from 'axios'
 import Head from 'next/head'
 import { ReactNode, useEffect } from 'react'
-import CustomTextField from 'src/components/text-field'
 import LayoutNotApp from 'src/views/layouts/LayoutNotApp'
 
 export default function Home() {
@@ -34,12 +33,10 @@ export default function Home() {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <h1>Hello world!</h1>
-      <Box sx={{ margin: 6, width: '200px' }}>
-        <CustomTextField id='outlined-multiline-flexible' label='Multiline' />
-      </Box>
     </>
   )
 }
 
 Home.getLayout = (pages: ReactNode) => <LayoutNotApp>{pages}</LayoutNotApp>
+Home.guestGuard = false
+Home.authGuard = false
