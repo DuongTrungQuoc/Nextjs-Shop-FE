@@ -33,6 +33,7 @@ import { store } from 'src/stores'
 // ** components
 import GuestGuard from 'src/components/auth/GuestGuard'
 import AuthGuard from 'src/components/auth/AuthGuard'
+import NoGuard from 'src/components/auth/NoGuard'
 import FallbackSpinner from 'src/components/fall-back'
 import AclGuard from 'src/components/auth/AclGuard'
 import ReactHotToast from 'src/components/react-hot-toast'
@@ -79,7 +80,7 @@ const Guard = ({ children, authGuard, guestGuard }: GuardProps) => {
   if (guestGuard) {
     return <GuestGuard fallback={<FallbackSpinner />}>{children}</GuestGuard>
   } else if (!guestGuard && !authGuard) {
-    return <>{children}</>
+    return <NoGuard fallback={<FallbackSpinner />}>{children}</NoGuard>
   } else {
     return <AuthGuard fallback={<FallbackSpinner />}>{children}</AuthGuard>
   }

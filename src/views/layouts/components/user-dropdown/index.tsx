@@ -186,22 +186,34 @@ const UserDropDown = (props: TProps) => {
         </Box>
         <Divider />
         <MenuItem onClick={handleNavigateMyProfile}>
-          <Avatar /> {t('my_profile')}
+          <Avatar>
+            <IconifyIcon icon='ph:user-thin' />
+          </Avatar>
+          {t('my_profile')}
         </MenuItem>
         <MenuItem onClick={handleClose}>
-          <Avatar /> My account
+          <Avatar>
+            <IconifyIcon icon='ph:user-thin' />
+          </Avatar>{' '}
+          My account
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleClose}>
-          <ListItemIcon>{/* <PersonAdd fontSize="small" /> */}</ListItemIcon>
+          <Avatar sx={{ backgroundColor: 'transparent' }}>
+            <IconifyIcon icon='icon-park-outline:add' />
+          </Avatar>
           Add another account
         </MenuItem>
         <MenuItem onClick={handleClose}>
-          <ListItemIcon>{/* <Settings fontSize="small" /> */}</ListItemIcon>
+          <Avatar sx={{ backgroundColor: 'transparent' }}>
+            <IconifyIcon icon='weui:setting-outlined' />
+          </Avatar>
           Settings
         </MenuItem>
         <MenuItem onClick={logout}>
-          <ListItemIcon>{/* <Logout fontSize="small" /> */}</ListItemIcon>
+          <Avatar sx={{ backgroundColor: 'transparent' }}>
+            <IconifyIcon icon='material-symbols:logout' />
+          </Avatar>
           Logout
         </MenuItem>
       </Menu>
