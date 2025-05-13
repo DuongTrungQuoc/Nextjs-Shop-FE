@@ -5,17 +5,15 @@ import { CONFIG_API } from "src/configs/api";
 import instanceAxios from "src/helpers/axios";
 
 // ** Types
-import { TLoginAuth, TRegisterAuth } from "src/types/auth";
+import { TLoginAuth, TRegisterAuth, TChangePassword } from "src/types/auth";
 
 
 export const loginAuth = async (data: TLoginAuth) => {
-  try {
-    const res = await instanceAxios.post(`${CONFIG_API.AUTH.INDEX}/login`,data)
+  
+    const res = await axios.post(`${CONFIG_API.AUTH.INDEX}/login`,data)
 
     return res.data
-  } catch (error) {
-    return null
-  }
+  
 }
 
 export const logoutAuth = async () => {
@@ -51,6 +49,16 @@ export const updateAuthMe = async (data: any) => {
 export const getAuthMe = async () => {
   try {
     const res = await instanceAxios.get(`${CONFIG_API.AUTH.INDEX}/me`)
+
+    return res.data
+  } catch (error) {
+    return error
+  }
+}
+
+export const changePasswordMe = async (data: TChangePassword) => {
+  try {
+    const res = await instanceAxios.patch(`${CONFIG_API.AUTH.INDEX}/change-password`,data)
 
     return res.data
   } catch (error) {
