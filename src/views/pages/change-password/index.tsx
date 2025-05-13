@@ -1,10 +1,11 @@
 // ** Next
 import { NextPage } from 'next'
 import Image from 'next/image'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 // ** React
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 // ** MUI
 import { Box, CssBaseline, Typography, Button, InputAdornment, IconButton, useTheme } from '@mui/material'
@@ -19,58 +20,75 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
 // ** config
-import { EMAIL_REG, PASSWORD_REG } from 'src/configs/regex'
+import { PASSWORD_REG } from 'src/configs/regex'
 
 // ** Images
 import RegisterDark from '/public/images/yugioh/chazz-register-dark.png'
 import RegisterLight from '/public/images/yugioh/yugi-register-light.png'
+
+// ** redux
 import { useDispatch, useSelector } from 'react-redux'
-import { registerAuthAsync } from 'src/stores/apps/auth/actions'
 import { AppDispatch, RootState } from 'src/stores'
-import toast from 'react-hot-toast'
-import FallbackSpinner from 'src/components/fall-back'
 import { resetInitialState } from 'src/stores/apps/auth'
-import { useRouter } from 'next/router'
-import { ROUTE_CONFIG } from 'src/configs/route'
+import { changePasswordMeAsync } from 'src/stores/apps/auth/actions'
+
+// ** components
+import FallbackSpinner from 'src/components/fall-back'
+
+// ** others
+import toast from 'react-hot-toast'
+import { useAuth } from 'src/hooks/useAuth'
 
 type TProps = {}
 type TDefaultValue = {
-  email: string
-  password: string
-  confirmPassword: string
+  currentPassword: string
+  newPassword: string
+  confirmNewPassword: string
 }
-const RegisterPage: NextPage<TProps> = () => {
+const ChangePasswordPage: NextPage<TProps> = () => {
   //State
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false)
+
+  // ** tranlate
+  const { t } = useTranslation()
 
   // ** router
   const router = useRouter()
 
+  // ** auth
+  const { logout } = useAuth()
+
   // ** redux
   const dispatch: AppDispatch = useDispatch()
-  const { isLoading, isError, isSuccess, message } = useSelector((state: RootState) => state.auth)
+  const { isLoading, isErrorChangePassword, isSuccessChangePassword, messageChangePassword } = useSelector(
+    (state: RootState) => state.auth
+  )
 
   // ** theme
   const theme = useTheme()
 
   const schema = yup.object().shape({
-    email: yup.string().required('The field is required').matches(EMAIL_REG, 'The field is must email type'),
-    password: yup
+    currentPassword: yup
       .string()
       .required('The field is required')
       .matches(PASSWORD_REG, 'The password is contain character, special character, number'),
-    confirmPassword: yup
+    newPassword: yup
+      .string()
+      .required('The field is required')
+      .matches(PASSWORD_REG, 'The password is contain character, special character, number'),
+    confirmNewPassword: yup
       .string()
       .required('The field is required')
       .matches(PASSWORD_REG, 'The password is contain character, special character, number')
-      .oneOf([yup.ref('password'), ''], 'The confirm is must match with password')
+      .oneOf([yup.ref('newPassword'), ''], 'The confirm is must match with password')
   })
 
   const defaultValues: TDefaultValue = {
-    email: '',
-    password: '',
-    confirmPassword: ''
+    currentPassword: '',
+    newPassword: '',
+    confirmNewPassword: ''
   }
 
   const {
@@ -84,31 +102,31 @@ const RegisterPage: NextPage<TProps> = () => {
   })
 
   //console.log('error login', { errors })
-  const onSubmit = (data: { email: string; password: string }) => {
-    if (!Object.keys(errors)?.length) {
-      dispatch(registerAuthAsync({ email: data.email, password: data.password }))
+  const onSubmit = (data: { currentPassword: string; newPassword: string }) => {
+    if (!Object.keys(errors).length) {
+      dispatch(changePasswordMeAsync({ currentPassword: data.currentPassword, newPassword: data.newPassword }))
     }
   }
 
   useEffect(() => {
-    if (message) {
-      if (isError) {
-        toast.error(message)
-      } else if (isSuccess) {
-        toast.success(message)
-        router.push(ROUTE_CONFIG.LOGIN)
+    if (messageChangePassword) {
+      if (isErrorChangePassword) {
+        toast.error(messageChangePassword)
+      } else if (isSuccessChangePassword) {
+        toast.success(messageChangePassword)
+        setTimeout(() => {
+          logout()
+        }, 500)
       }
       dispatch(resetInitialState())
     }
-  }, [isError, isSuccess, message])
+  }, [isErrorChangePassword, isSuccessChangePassword, messageChangePassword])
 
   return (
     <>
       {isLoading && <FallbackSpinner />}
       <Box
         sx={{
-          height: '100vh',
-          width: '100vw',
           backgroundColor: theme.palette.background.paper,
           display: 'flex',
           alignItems: 'center'
@@ -149,7 +167,7 @@ const RegisterPage: NextPage<TProps> = () => {
             }}
           >
             <Typography component='h1' variant='h5'>
-              Register
+              {t('Change_password')}
             </Typography>
             <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate>
               <Box sx={{ mt: 2, width: '300px' }}>
@@ -162,16 +180,30 @@ const RegisterPage: NextPage<TProps> = () => {
                     <CustomTextField
                       required
                       fullWidth
-                      label='Email'
+                      label={t('Current_password')}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
-                      placeholder='dtquoc@gmail.com'
-                      error={Boolean(errors?.email)}
-                      helperText={errors?.email?.message}
+                      placeholder='Input password'
+                      error={Boolean(errors?.currentPassword)}
+                      helperText={errors?.currentPassword?.message}
+                      type={showCurrentPassword ? 'text' : 'password'}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            <IconButton edge='end' onClick={() => setShowCurrentPassword(!showCurrentPassword)}>
+                              {showCurrentPassword ? (
+                                <Icon icon='material-symbols:visibility-outline' />
+                              ) : (
+                                <Icon icon='material-symbols:visibility-off-outline' />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        )
+                      }}
                     />
                   )}
-                  name='email'
+                  name='currentPassword'
                 />
               </Box>
 
@@ -185,19 +217,19 @@ const RegisterPage: NextPage<TProps> = () => {
                     <CustomTextField
                       required
                       fullWidth
-                      label='Password'
+                      label={t('New_password')}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
-                      placeholder='Quoc12022002&'
-                      error={Boolean(errors?.password)}
-                      helperText={errors?.password?.message}
-                      type={showPassword ? 'text' : 'password'}
+                      placeholder={t('enter_new_password')}
+                      error={Boolean(errors?.newPassword)}
+                      helperText={errors?.newPassword?.message}
+                      type={showNewPassword ? 'text' : 'password'}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position='end'>
-                            <IconButton edge='end' onClick={() => setShowPassword(!showPassword)}>
-                              {showPassword ? (
+                            <IconButton edge='end' onClick={() => setShowNewPassword(!showNewPassword)}>
+                              {showNewPassword ? (
                                 <Icon icon='material-symbols:visibility-outline' />
                               ) : (
                                 <Icon icon='material-symbols:visibility-off-outline' />
@@ -208,7 +240,7 @@ const RegisterPage: NextPage<TProps> = () => {
                       }}
                     />
                   )}
-                  name='password'
+                  name='newPassword'
                 />
               </Box>
 
@@ -222,19 +254,19 @@ const RegisterPage: NextPage<TProps> = () => {
                     <CustomTextField
                       required
                       fullWidth
-                      label='Confirm password'
+                      label={t('Confirm_new_password')}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
-                      placeholder='Quoc12022002&'
-                      error={Boolean(errors?.confirmPassword)}
-                      helperText={errors?.confirmPassword?.message}
-                      type={showConfirmPassword ? 'text' : 'password'}
+                      placeholder={t('enter_confirm_new_password')}
+                      error={Boolean(errors?.confirmNewPassword)}
+                      helperText={errors?.confirmNewPassword?.message}
+                      type={showConfirmNewPassword ? 'text' : 'password'}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position='end'>
-                            <IconButton edge='end' onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-                              {showConfirmPassword ? (
+                            <IconButton edge='end' onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}>
+                              {showConfirmNewPassword ? (
                                 <Icon icon='material-symbols:visibility-outline' />
                               ) : (
                                 <Icon icon='material-symbols:visibility-off-outline' />
@@ -245,30 +277,13 @@ const RegisterPage: NextPage<TProps> = () => {
                       }}
                     />
                   )}
-                  name='confirmPassword'
+                  name='confirmNewPassword'
                 />
               </Box>
 
               <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-                Register
+                {t('Change')}
               </Button>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
-                <Typography>{'Do you have already account?'}</Typography>
-
-                <Link
-                  href='/login'
-                  style={{
-                    color: theme.palette.primary.main
-                  }}
-                >
-                  {'Login'}
-                </Link>
-              </Box>
-              <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>Or</Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
-                <Icon icon='devicon:google' />
-                <Icon icon='logos:facebook' />
-              </Box>
             </form>
           </Box>
         </Box>
@@ -277,6 +292,6 @@ const RegisterPage: NextPage<TProps> = () => {
   )
 }
 
-export default RegisterPage
+export default ChangePasswordPage
 
 // https://github.com/mui/material-ui/blob/v5.17.1/docs/data/material/getting-started/templates/sign-in/SignIn.tsx

@@ -14,6 +14,10 @@
   "enter_your_phone_number": "Nhập số điện thoại của bạn",
   "upload_avatar": "Tải lên ảnh đại diện",
   "change_avatar": "Thay đổi ảnh đại diện",
-  "Update": "Cập nhật"
+  "Update": "Cập nhật",
+  "Change_password": "Đổi mật khẩu",
+  "Logout": "Đăng xuất",
+  "the_email_or_password_wrong": "Email hoặc mật khẩu không chính xác",
+  "login_success": "Đăng nhập thành công"
 
 }
