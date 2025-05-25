@@ -48,7 +48,7 @@ type TDefaultValue = {
   address: string
   city: string
   phoneNumber: string
-  role: string
+  role: string | null
   fullName: string
 }
 const MyProfilePage: NextPage<TProps> = () => {
@@ -73,17 +73,17 @@ const MyProfilePage: NextPage<TProps> = () => {
     email: yup.string().required('The field is required').matches(EMAIL_REG, 'The field is must email type'),
     fullName: yup.string().notRequired(),
     phoneNumber: yup.string().required('The field is required').min(9, 'The phone number has a minimum of 9 digits.'),
-    role: yup.string().required('The field is required'),
+    role: yup.string().nullable().required('The field is required'),
     address: yup.string().notRequired(),
     city: yup.string().notRequired()
-  })
+  }) as yup.ObjectSchema<TDefaultValue>
 
   const defaultValues: TDefaultValue = {
     email: '',
     address: '',
     city: '',
     phoneNumber: '',
-    role: '',
+    role: null,
     fullName: ''
   }
 
@@ -283,7 +283,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                         <CustomSelect
                           fullWidth
                           onChange={onChange}
-                          value={value}
+                          value={typeof value === 'string' ? value : ''}
                           options={[]}
                           error={Boolean(errors?.role)}
                           onBlur={onBlur}

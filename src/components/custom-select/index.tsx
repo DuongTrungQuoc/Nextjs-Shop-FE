@@ -1,8 +1,12 @@
 import { Box, MenuItem, MenuItemProps, Select, SelectProps, styled } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-interface TCustomSelect extends SelectProps {
+interface TCustomSelect extends Omit<SelectProps, 'children'> {
   options: { label: string; value: string }[]
+  value?: string | number | null
+  label?: string
+  onChange?: (event: any) => void
+  fullWidth?: boolean
 }
 
 const StyleSelect = styled(Select)<SelectProps>(({ theme }) => ({
@@ -21,7 +25,7 @@ const CustomSelect = (props: TCustomSelect) => {
 
   return (
     <Box sx={{ width: '100%', heigth: '100%', position: 'relative' }}>
-      <StyleSelect fullWidth={fullWidth} value={value} label={label} onChange={onChange} {...rest}>
+      <StyleSelect fullWidth={fullWidth} value={value ?? ''} label={label} onChange={onChange} {...rest}>
         {options.length > 0 ? (
           options?.map(opt => {
             return (
