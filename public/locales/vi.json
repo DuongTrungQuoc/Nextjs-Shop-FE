@@ -18,6 +18,7 @@
   "Change_password": "Đổi mật khẩu",
   "Logout": "Đăng xuất",
   "the_email_or_password_wrong": "Email hoặc mật khẩu không chính xác",
-  "login_success": "Đăng nhập thành công"
+  "login_success": "Đăng nhập thành công",
+  "no_data": "Không có dữ liệu"
 
 }
