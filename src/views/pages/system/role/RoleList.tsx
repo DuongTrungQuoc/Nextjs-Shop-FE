@@ -9,7 +9,7 @@ import toast from 'react-hot-toast'
 
 // ** MUI
 import { Box, useTheme, Grid } from '@mui/material'
-import { GridColDef } from '@mui/x-data-grid'
+import { GridColDef, GridSortModel } from '@mui/x-data-grid'
 
 // ** redux
 import { useDispatch, useSelector } from 'react-redux'
@@ -40,6 +40,8 @@ const RoleListPage: NextPage<TProps> = () => {
     open: false,
     id: ''
   })
+  const [sortBy, setSortBy] = useState('created asc')
+  const [searchBy, setSearchBy] = useState('')
 
   // ** tranlate
   const { t } = useTranslation()
@@ -61,13 +63,19 @@ const RoleListPage: NextPage<TProps> = () => {
   // ** theme
   const theme = useTheme()
 
-  // fetch api
+  // fetch api get all roles
   const handleGetListRoles = () => {
-    dispatch(getAllRolesAsync({ params: { limit: -1, page: -1, search: '' } }))
+    dispatch(getAllRolesAsync({ params: { limit: -1, page: -1, search: searchBy, order: sortBy } }))
   }
 
   // handle
   const handleOnchangePagination = (page: number, pageSize: number) => {}
+
+  const handleSort = (sort: GridSortModel) => {
+    console.log('sort', { sort })
+    const sortOption = sort[0]
+    setSortBy(`${sortOption.field} ${sortOption.sort}`)
+  }
 
   const handleCloseCreateEdit = () => {
     setOpenCreateEditRole({ open: false, id: '' })
@@ -117,9 +125,10 @@ const RoleListPage: NextPage<TProps> = () => {
     )
   }
 
+  // Lấy danh sách roles khi component mount
   useEffect(() => {
     handleGetListRoles()
-  }, [])
+  }, [sortBy, searchBy])
 
   // Hiển thị thông báo khi tạo hoặc cập nhật thành công
   useEffect(() => {
@@ -167,7 +176,7 @@ const RoleListPage: NextPage<TProps> = () => {
           <Grid item md={5} xs={12}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
               <Box sx={{ width: '200px' }}>
-                <InputSearch />
+                <InputSearch value={searchBy} onChange={(value: string) => setSearchBy(value)} />
               </Box>
 
               <GridCreate
@@ -188,6 +197,9 @@ const RoleListPage: NextPage<TProps> = () => {
               autoHeight
               disableRowSelectionOnClick
               hideFooter
+              sortingOrder={['desc', 'asc']}
+              sortingMode='server'
+              onSortModelChange={handleSort}
               slots={{
                 pagination: PaginationComponent
               }}
