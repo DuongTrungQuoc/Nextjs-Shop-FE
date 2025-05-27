@@ -1,7 +1,8 @@
 export type TParamsGetRoles = {
   limit: number,
   page: number,
-  search?: string
+  search?: string,
+  order: string
 }
 
 export type TParamsCreateRole = {
