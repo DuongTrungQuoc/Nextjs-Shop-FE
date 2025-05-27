@@ -1,15 +1,13 @@
 // ** Import Next
 import { NextPage } from 'next'
-
-// ** Page
-import RoleListPage from 'src/views/pages/system/role/RoleList'
+import { ReactNode } from 'react'
 
 // ** views
 
 type TProps = {}
 
 const Index: NextPage<TProps> = () => {
-  return <RoleListPage />
+  return <h1>dashboard</h1>
 }
 
 export default Index

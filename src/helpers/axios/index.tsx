@@ -3,7 +3,7 @@ import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 
 // ** configs
-import { BASE_URL, CONFIG_API } from 'src/configs/api'
+import { BASE_URL, API_ENDPOINT } from 'src/configs/api'
 
 // ** helpers
 import {
@@ -72,7 +72,7 @@ const AxiosInterceptor: FC<TAxiosInterceptor> = ({ children }) => {
             //call api return new access token
             await axios
               .post(
-                `${CONFIG_API.AUTH.INDEX}/refresh-token`,
+                `${API_ENDPOINT.AUTH.INDEX}/refresh-token`,
                 {},
                 {
                   headers: {

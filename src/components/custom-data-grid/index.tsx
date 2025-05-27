@@ -3,7 +3,14 @@ import Box from '@mui/material/Box'
 import { DataGrid, DataGridProps, GridColDef, GridValueGetterParams } from '@mui/x-data-grid'
 import { styled } from '@mui/material'
 
-const StyleCustomGrid = styled(DataGrid)<DataGridProps>(({ theme }) => ({}))
+const StyleCustomGrid = styled(DataGrid)<DataGridProps>(({ theme }) => ({
+  '.MuiDataGrid-withBorderColor': {
+    outline: 'none !important'
+  },
+  '.MuiDataGrid-selectedRowCount': {
+    display: 'none'
+  }
+}))
 
 const CustomDataGrid = React.forwardRef((props: DataGridProps, ref: Ref<any>) => {
   return (

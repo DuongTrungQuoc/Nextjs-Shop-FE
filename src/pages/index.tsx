@@ -3,6 +3,8 @@ import { useTheme } from '@mui/material'
 import axios from 'axios'
 import Head from 'next/head'
 import { ReactNode, useEffect } from 'react'
+
+// ** layout
 import LayoutNotApp from 'src/views/layouts/LayoutNotApp'
 
 export default function Home() {

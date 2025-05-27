@@ -14,5 +14,13 @@
   "enter_your_phone_number": "Nhập số điện thoại của bạn",
   "upload_avatar": "Tải lên ảnh đại diện",
   "change_avatar": "Thay đổi ảnh đại diện",
-  "Update": "Cập nhật"
+  "Update": "Cập nhật",
+  "manage_system": "Quản trị hệ thống",
+  "Name":"Name",
+  "Actions":"Actions",
+  "Create": "Create" ,
+  "Edit":"Edit",
+  "Delete":"Delete",
+  "required_field":"The field is required",
+  "create-role-success":"Created role successfully"
 }

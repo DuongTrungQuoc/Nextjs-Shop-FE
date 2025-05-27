@@ -82,7 +82,10 @@ const UserDropDown = (props: TProps) => {
   const handleClose = () => {
     setAnchorEl(null)
   }
-
+  const handleNavigateManageSystem = () => {
+    router.push(ROUTE_CONFIG.DASHBOARD)
+    handleClose()
+  }
   const handleNavigateMyProfile = () => {
     router.push(ROUTE_CONFIG.MY_PROFILE)
     handleClose()
@@ -190,18 +193,19 @@ const UserDropDown = (props: TProps) => {
           </Box>
         </Box>
         <Divider />
+        <MenuItem onClick={handleNavigateManageSystem}>
+          <Avatar>
+            <IconifyIcon icon='arcticons:activity-manager' />
+          </Avatar>
+          {t('manage_system')}
+        </MenuItem>
         <MenuItem onClick={handleNavigateMyProfile}>
           <Avatar>
             <IconifyIcon icon='ph:user-thin' />
           </Avatar>
           {t('my_profile')}
         </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar>
-            <IconifyIcon icon='ph:user-thin' />
-          </Avatar>{' '}
-          My account
-        </MenuItem>
+
         <Divider />
         <MenuItem onClick={handleClose}>
           <Avatar sx={{ backgroundColor: 'transparent' }}>
