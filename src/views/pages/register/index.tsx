@@ -2,9 +2,12 @@
 import { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 // ** React
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import { useTranslation } from 'react-i18next'
 
 // ** MUI
 import { Box, CssBaseline, Typography, Button, InputAdornment, IconButton, useTheme } from '@mui/material'
@@ -12,6 +15,7 @@ import { Box, CssBaseline, Typography, Button, InputAdornment, IconButton, useTh
 // ** components
 import CustomTextField from 'src/components/text-field'
 import Icon from 'src/components/Icon'
+import FallbackSpinner from 'src/components/fall-back'
 
 // ** react-hook-form
 import { useForm, Controller } from 'react-hook-form'
@@ -20,18 +24,17 @@ import * as yup from 'yup'
 
 // ** config
 import { EMAIL_REG, PASSWORD_REG } from 'src/configs/regex'
+import { ROUTE_CONFIG } from 'src/configs/route'
 
 // ** Images
 import RegisterDark from '/public/images/yugioh/chazz-register-dark.png'
 import RegisterLight from '/public/images/yugioh/yugi-register-light.png'
+
+// ** redux
 import { useDispatch, useSelector } from 'react-redux'
-import { registerAuthAsync } from 'src/stores/apps/auth/actions'
+import { registerAuthAsync } from 'src/stores/auth/actions'
 import { AppDispatch, RootState } from 'src/stores'
-import toast from 'react-hot-toast'
-import FallbackSpinner from 'src/components/fall-back'
-import { resetInitialState } from 'src/stores/apps/auth'
-import { useRouter } from 'next/router'
-import { ROUTE_CONFIG } from 'src/configs/route'
+import { resetInitialState } from 'src/stores/auth'
 
 type TProps = {}
 type TDefaultValue = {
@@ -44,6 +47,9 @@ const RegisterPage: NextPage<TProps> = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
+  // ** tranlate
+  const { t } = useTranslation()
+
   // ** router
   const router = useRouter()
 
@@ -55,14 +61,14 @@ const RegisterPage: NextPage<TProps> = () => {
   const theme = useTheme()
 
   const schema = yup.object().shape({
-    email: yup.string().required('The field is required').matches(EMAIL_REG, 'The field is must email type'),
+    email: yup.string().required(t('required_field')).matches(EMAIL_REG, 'The field is must email type'),
     password: yup
       .string()
-      .required('The field is required')
+      .required(t('required_field'))
       .matches(PASSWORD_REG, 'The password is contain character, special character, number'),
     confirmPassword: yup
       .string()
-      .required('The field is required')
+      .required(t('required_field'))
       .matches(PASSWORD_REG, 'The password is contain character, special character, number')
       .oneOf([yup.ref('password'), ''], 'The confirm is must match with password')
   })

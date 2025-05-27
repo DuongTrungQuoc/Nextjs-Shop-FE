@@ -32,8 +32,8 @@ import { getAuthMe } from 'src/services/auth'
 import { convertBase64, separationFullName, toFullName } from 'src/utils'
 
 // ** redux
-import { resetInitialState } from 'src/stores/apps/auth'
-import { updateAuthMeAsync } from 'src/stores/apps/auth/actions'
+import { resetInitialState } from 'src/stores/auth'
+import { updateAuthMeAsync } from 'src/stores/auth/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from 'src/stores'
 
@@ -70,10 +70,10 @@ const MyProfilePage: NextPage<TProps> = () => {
   )
 
   const schema = yup.object().shape({
-    email: yup.string().required('The field is required').matches(EMAIL_REG, 'The field is must email type'),
+    email: yup.string().required(t('required_field')).matches(EMAIL_REG, 'The field is must email type'),
     fullName: yup.string().notRequired(),
-    phoneNumber: yup.string().required('The field is required').min(9, 'The phone number has a minimum of 9 digits.'),
-    role: yup.string().nullable().required('The field is required'),
+    phoneNumber: yup.string().required(t('required_field')).min(9, 'The phone number has a minimum of 9 digits.'),
+    role: yup.string().nullable().required(t('required_field')),
     address: yup.string().notRequired(),
     city: yup.string().notRequired()
   }) as yup.ObjectSchema<TDefaultValue>

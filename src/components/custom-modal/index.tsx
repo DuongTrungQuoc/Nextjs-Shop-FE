@@ -1,18 +1,16 @@
 import { Box, Modal, ModalProps, styled } from '@mui/material'
 
-interface TCustomModal extends ModalProps {
-  handleClose: () => void
-}
+interface TCustomModal extends ModalProps {}
 
 const StyleModal = styled(Modal)<ModalProps>(({ theme }) => ({
   zIndex: 1202
 }))
 
 const CustomModal = (props: TCustomModal) => {
-  const { children, open, handleClose } = props
+  const { children, open, onClose } = props
 
   return (
-    <StyleModal open={open} onClose={handleClose} aria-labelledby='modal-modal-title'>
+    <StyleModal open={open} onClose={onClose} aria-labelledby='modal-modal-title'>
       <Box
         sx={{
           height: '100%',
