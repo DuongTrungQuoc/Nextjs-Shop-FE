@@ -45,7 +45,7 @@ const CreateEditRole = (props: TCreateEditRole) => {
   const dispatch: AppDispatch = useDispatch()
 
   const schema = yup.object().shape({
-    name: yup.string().required(t('required_field'))
+    name: yup.string().required(t('Required_field'))
   })
 
   const defaultValues = {
@@ -109,7 +109,7 @@ const CreateEditRole = (props: TCreateEditRole) => {
       {loading && <Spinner />}
       <CustomModal open={open} onClose={onClose}>
         <Box
-          sx={{ backgroundColor: theme.palette.background.paper, padding: ' 20px', borderRadius: '15px' }}
+          sx={{ backgroundColor: theme.palette.customColors.bodyBg, padding: ' 20px', borderRadius: '15px' }}
           minWidth={{ md: '400px', xs: '80vw' }}
         >
           <Box sx={{ display: 'flex', justifyContent: 'center', position: 'relative', paddingBottom: '20px' }}>
@@ -121,7 +121,14 @@ const CreateEditRole = (props: TCreateEditRole) => {
             </IconButton>
           </Box>
           <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate>
-            <Box sx={{ width: '100%' }}>
+            <Box
+              sx={{
+                width: '100%',
+                backgroundColor: theme.palette.background.paper,
+                padding: '30px 20px',
+                borderRadius: '15px'
+              }}
+            >
               <Controller
                 control={control}
                 rules={{
@@ -135,7 +142,7 @@ const CreateEditRole = (props: TCreateEditRole) => {
                     onChange={onChange}
                     onBlur={onBlur}
                     value={value}
-                    placeholder={t('enter_name')}
+                    placeholder={t('Entername')}
                     error={Boolean(errors?.name)}
                     helperText={errors?.name?.message}
                   />

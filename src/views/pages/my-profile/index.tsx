@@ -2,7 +2,7 @@
 import { NextPage } from 'next'
 
 // ** React
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 
 // ** MUI
 import { Box, Button, IconButton, useTheme, Grid, Avatar, InputLabel, FormHelperText } from '@mui/material'
@@ -41,6 +41,8 @@ import { AppDispatch, RootState } from 'src/stores'
 import toast from 'react-hot-toast'
 import Spinner from 'src/components/spinner'
 import CustomSelect from 'src/components/custom-select'
+import { getAllRoles } from 'src/services/role'
+import { set } from 'nprogress'
 
 type TProps = {}
 type TDefaultValue = {
@@ -55,7 +57,7 @@ const MyProfilePage: NextPage<TProps> = () => {
   //State
   const [loading, setLoading] = useState(false)
   const [avatar, setAvatar] = useState('')
-  const [roleId, setRoleId] = useState('')
+  const [optionRoles, setOptionRoles] = useState<{ label: string; value: string }[]>([])
 
   // **Translate
   const { i18n } = useTranslation()
@@ -70,10 +72,10 @@ const MyProfilePage: NextPage<TProps> = () => {
   )
 
   const schema = yup.object().shape({
-    email: yup.string().required(t('required_field')).matches(EMAIL_REG, 'The field is must email type'),
+    email: yup.string().required(t('Required_field')).matches(EMAIL_REG, 'The field is must email type'),
     fullName: yup.string().notRequired(),
-    phoneNumber: yup.string().required(t('required_field')).min(9, 'The phone number has a minimum of 9 digits.'),
-    role: yup.string().nullable().required(t('required_field')),
+    phoneNumber: yup.string().required(t('Required_field')).min(9, 'The phone number has a minimum of 9 digits.'),
+    role: yup.string().nullable().required(t('Required_field')),
     address: yup.string().notRequired(),
     city: yup.string().notRequired()
   }) as yup.ObjectSchema<TDefaultValue>
@@ -98,6 +100,8 @@ const MyProfilePage: NextPage<TProps> = () => {
     resolver: yupResolver(schema)
   })
 
+  // fetch api
+  // Lấy thông tin người dùng hiện tại
   const fetchGetAuthMe = async () => {
     setLoading(true)
     await getAuthMe()
@@ -106,14 +110,12 @@ const MyProfilePage: NextPage<TProps> = () => {
         const data = response?.data
         console.log('response getAuthMe', { response })
         if (data) {
-          setRoleId(data?.role?._id)
-          setAvatar(data?.avatar)
           reset({
             email: data?.email,
             address: data?.address,
             city: data?.city,
             phoneNumber: data?.phoneNumber,
-            role: data?.role?.name,
+            role: data?.role?._id,
             fullName: toFullName(data?.lastName, data?.middleName, data?.firstName, i18n.language)
           })
         }
@@ -122,6 +124,28 @@ const MyProfilePage: NextPage<TProps> = () => {
         setLoading(false)
       })
   }
+
+  const fetchAllRoles = async () => {
+    setLoading(true)
+    await getAllRoles({ params: { limit: -1, page: -1 } })
+      .then(res => {
+        const data = res?.data.roles
+        if (data) {
+          setOptionRoles(
+            data?.map((item: { name: string; _id: string }) => ({
+              label: item.name,
+              value: item._id
+            }))
+          )
+        }
+        setLoading(false)
+      })
+      .catch(e => {
+        setLoading(false)
+      })
+  }
+
+  // END------fetch api-------
 
   useEffect(() => {
     fetchGetAuthMe()
@@ -139,6 +163,11 @@ const MyProfilePage: NextPage<TProps> = () => {
     }
   }, [isErrorUpdateMe, isSuccessUpdateMe, messageUpdateMe])
 
+  useEffect(() => {
+    // Khi component mount, gọi hàm để lấy danh sách roles
+    fetchAllRoles()
+  }, [])
+
   //console.log('error login', { errors })
   //console.log('user', { user })
   const onSubmit = (data: any) => {
@@ -150,7 +179,7 @@ const MyProfilePage: NextPage<TProps> = () => {
         address: data.address,
         //city: data.city,
         phoneNumber: data.phoneNumber,
-        role: roleId,
+        role: data.role,
         firstName: firstName,
         middleName: middleName,
         lastName: lastName,
@@ -233,7 +262,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                     >
                       <Button variant='outlined' sx={{ width: 'auto', display: 'flex', alignItems: 'center', gap: 1 }}>
                         <IconifyIcon icon='ph:camera-thin' />
-                        {avatar ? t('change_avatar') : t('upload_avatar')}
+                        {avatar ? t('Change_avatar') : t('Upload_avatar')}
                       </Button>
                     </WrapperFileUpload>
                   </Box>
@@ -253,7 +282,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                         onChange={onChange}
                         onBlur={onBlur}
                         value={value}
-                        placeholder={t('enter_your_email')}
+                        placeholder={t('Enteryour_email')}
                         error={Boolean(errors?.email)}
                         helperText={errors?.email?.message}
                       />
@@ -284,12 +313,12 @@ const MyProfilePage: NextPage<TProps> = () => {
                           fullWidth
                           onChange={onChange}
                           value={typeof value === 'string' ? value : ''}
-                          options={[]}
+                          options={optionRoles}
                           error={Boolean(errors?.role)}
                           onBlur={onBlur}
-                          placeholder={t('enter_your_role')}
+                          placeholder={t('Enteryour_role')}
                         />
-                        {errors?.role?.message && (
+                        {!errors?.role?.message && (
                           <FormHelperText
                             sx={{
                               color: errors?.role
@@ -334,7 +363,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                         onChange={onChange}
                         onBlur={onBlur}
                         value={value}
-                        placeholder={t('enter_your_full_name')}
+                        placeholder={t('Enteryour_full_name')}
                         error={Boolean(errors?.fullName)}
                         helperText={errors?.fullName?.message}
                       />
@@ -353,7 +382,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                         onChange={onChange}
                         onBlur={onBlur}
                         value={value}
-                        placeholder={t('enter_your_address')}
+                        placeholder={t('Enteryour_address')}
                       />
                     )}
                   />
@@ -370,14 +399,14 @@ const MyProfilePage: NextPage<TProps> = () => {
                       //   onChange={onChange}
                       //   onBlur={onBlur}
                       //   value={value}
-                      //   placeholder={t('enter_your_city')}
+                      //   placeholder={t('Enteryour_city')}
                       // />
                       <Box>
                         <InputLabel
                           sx={{
                             marginBottom: '2px',
                             fontSize: '13px',
-                            color: errors?.role
+                            color: errors?.city
                               ? theme.palette.error.main
                               : `rgba(${theme.palette.customColors.main},0.42)`
                           }}
@@ -391,18 +420,18 @@ const MyProfilePage: NextPage<TProps> = () => {
                           options={[]}
                           error={Boolean(errors?.role)}
                           onBlur={onBlur}
-                          placeholder={t('enter_your_city')}
+                          placeholder={t('Enteryour_city')}
                         />
-                        {errors?.role?.message && (
+                        {!errors?.city?.message && (
                           <FormHelperText
                             sx={{
-                              color: errors?.role
+                              color: errors?.city
                                 ? theme.palette.error.main
                                 : `rgba(${theme.palette.customColors.main},0.42)`
                             }}
                             id='my-helper-text'
                           >
-                            {errors?.role?.message}
+                            {errors?.city?.message}
                           </FormHelperText>
                         )}
                       </Box>
@@ -429,7 +458,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                         }}
                         onBlur={onBlur}
                         value={value}
-                        placeholder={t('enter_your_phone_number')}
+                        placeholder={t('Enteryour_phone_number')}
                         error={Boolean(errors?.phoneNumber)}
                         helperText={errors?.phoneNumber?.message}
                       />

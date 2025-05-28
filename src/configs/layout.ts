@@ -1,47 +1,51 @@
+import { useTranslation } from "react-i18next";
 import { ROUTE_CONFIG } from "./route";
 
-export const VerticalItems = [
+export const VerticalItems = () => {
+  const {t} = useTranslation();
+
+  return [
   {
-    title: "Hệ thống",
+    title: t("System"),
     icon: "eos-icons:file-system-outlined",
     childrens: [
       {
-        title: "Người dùng",
+        title: t("User"),
         icon: "lets-icons:group",
         path: ROUTE_CONFIG.SYSTEM.USER
       
       },
       {
-        title: "Nhóm vai trò",
+        title: t("Role"),
         icon: "icon-park-outline:permissions",
         path: ROUTE_CONFIG.SYSTEM.ROLE
       },
     ]
   },
   {
-    title: "Quản trị sản phẩm",
+    title: t("Manage_product"),
     icon: "ix:product-management",
     childrens: [
       {
-        title: "Danh sách sản phẩm",
+        title: t("List_product"),
         icon: "icon-park-outline:ad-product",
         path: ROUTE_CONFIG.MANAGE_PRODUCT.PRODUCT
       
       },
       {
-        title: "Danh mục sản phẩm",
+        title: t("Type_product"),
         icon: "mdi:category-plus-outline",
         path: ROUTE_CONFIG.MANAGE_PRODUCT.MANAGE_TYPE_PRODUCT
       
       },
       {
-        title: "Danh sách đơn hàng",
+        title: t("List_order"),
         icon: "lsicon:order-outline",
         path: ROUTE_CONFIG.MANAGE_PRODUCT.MANAGE_ORDER
       
       },
       {
-        title: "Danh sách đánh giá",
+        title: t("List_review"),
         icon: "carbon:review",
         path: ROUTE_CONFIG.MANAGE_PRODUCT.MANAGE_REVIEW
       
@@ -49,23 +53,23 @@ export const VerticalItems = [
     ]
   },
   {
-    title: "Cài đặt",
+    title: t("Setting"),
     icon: "uil:setting",
     childrens: [
       {
-        title: "Cài đặt thành phố",
+        title: t("City"),
         icon: "healthicons:city-outline",
         path: ROUTE_CONFIG.SETTINGS.CITY
       
       },
       {
-        title: "Cài đặt phương thức giao hàng",
+        title: t("Delivery_method"),
         icon: "iconoir:delivery-truck",
         path: ROUTE_CONFIG.SETTINGS.DELIVERY_TYPE
       
       },
       {
-        title: "Cài đặt phương thức thanh toán",
+        title: t("Payment_method"),
         icon: "streamline:payment-10-solid",
         path: ROUTE_CONFIG.SETTINGS.PAYMENT_TYPE
       
@@ -73,3 +77,4 @@ export const VerticalItems = [
     ]
   },
 ]
+}

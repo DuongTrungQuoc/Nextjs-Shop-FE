@@ -162,13 +162,15 @@ const RecursiveListItems: NextPage<TListItems> = ({ items, level, setActivePath,
 const ListVerticalLayout: NextPage<TProps> = () => {
   const [activePath, setActivePath] = useState<null | string>('')
 
+  const listVerticalItems = VerticalItems()
+
   return (
     <List
       sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', padding: 0 }}
       component='nav'
       aria-labelledby='nested-list-subheader'
     >
-      <RecursiveListItems items={VerticalItems} level={1} activePath={activePath} setActivePath={setActivePath} />
+      <RecursiveListItems items={listVerticalItems} level={1} activePath={activePath} setActivePath={setActivePath} />
     </List>
   )
 }

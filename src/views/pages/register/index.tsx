@@ -61,16 +61,13 @@ const RegisterPage: NextPage<TProps> = () => {
   const theme = useTheme()
 
   const schema = yup.object().shape({
-    email: yup.string().required(t('required_field')).matches(EMAIL_REG, 'The field is must email type'),
-    password: yup
-      .string()
-      .required(t('required_field'))
-      .matches(PASSWORD_REG, 'The password is contain character, special character, number'),
+    email: yup.string().required(t('Required_field')).matches(EMAIL_REG, t('Rules_email')),
+    password: yup.string().required(t('Required_field')).matches(PASSWORD_REG, t('Rules_password')),
     confirmPassword: yup
       .string()
-      .required(t('required_field'))
-      .matches(PASSWORD_REG, 'The password is contain character, special character, number')
-      .oneOf([yup.ref('password'), ''], 'The confirm is must match with password')
+      .required(t('Required_field'))
+      .matches(PASSWORD_REG, t('Rules_password'))
+      .oneOf([yup.ref('password'), ''], t('Rules_confirm_password'))
   })
 
   const defaultValues: TDefaultValue = {
@@ -155,7 +152,7 @@ const RegisterPage: NextPage<TProps> = () => {
             }}
           >
             <Typography component='h1' variant='h5'>
-              Register
+              {t('Register')}
             </Typography>
             <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate>
               <Box sx={{ mt: 2, width: '300px' }}>
@@ -168,11 +165,11 @@ const RegisterPage: NextPage<TProps> = () => {
                     <CustomTextField
                       required
                       fullWidth
-                      label='Email'
+                      label={t('Email')}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
-                      placeholder='dtquoc@gmail.com'
+                      placeholder={t('Enteremail')}
                       error={Boolean(errors?.email)}
                       helperText={errors?.email?.message}
                     />
@@ -191,11 +188,11 @@ const RegisterPage: NextPage<TProps> = () => {
                     <CustomTextField
                       required
                       fullWidth
-                      label='Password'
+                      label={t('Password')}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
-                      placeholder='Quoc12022002&'
+                      placeholder={t('Enterpassword')}
                       error={Boolean(errors?.password)}
                       helperText={errors?.password?.message}
                       type={showPassword ? 'text' : 'password'}
@@ -228,11 +225,11 @@ const RegisterPage: NextPage<TProps> = () => {
                     <CustomTextField
                       required
                       fullWidth
-                      label='Confirm password'
+                      label={t('Confirm_password')}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}
-                      placeholder='Quoc12022002&'
+                      placeholder={t('Enterconfirm_password')}
                       error={Boolean(errors?.confirmPassword)}
                       helperText={errors?.confirmPassword?.message}
                       type={showConfirmPassword ? 'text' : 'password'}
@@ -256,10 +253,10 @@ const RegisterPage: NextPage<TProps> = () => {
               </Box>
 
               <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-                Register
+                {t('Register')}
               </Button>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
-                <Typography>{'Do you have already account?'}</Typography>
+                <Typography>{t('Do_you_have_already_account?')}</Typography>
 
                 <Link
                   href='/login'
@@ -267,10 +264,10 @@ const RegisterPage: NextPage<TProps> = () => {
                     color: theme.palette.primary.main
                   }}
                 >
-                  {'Login'}
+                  {t('Login')}
                 </Link>
               </Box>
-              <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>Or</Typography>
+              <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>{t('Or')}</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
                 <Icon icon='devicon:google' />
                 <Icon icon='logos:facebook' />
