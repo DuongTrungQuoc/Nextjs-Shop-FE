@@ -197,13 +197,13 @@ const UserDropDown = (props: TProps) => {
           <Avatar>
             <IconifyIcon icon='arcticons:activity-manager' />
           </Avatar>
-          {t('manage_system')}
+          {t('Manage_system')}
         </MenuItem>
         <MenuItem onClick={handleNavigateMyProfile}>
           <Avatar>
             <IconifyIcon icon='ph:user-thin' />
           </Avatar>
-          {t('my_profile')}
+          {t('My_profile')}
         </MenuItem>
 
         <Divider />

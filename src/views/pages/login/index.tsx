@@ -62,11 +62,8 @@ const LoginPage: NextPage<TProps> = () => {
   const theme = useTheme()
 
   const schema = yup.object().shape({
-    email: yup.string().required(t('required_field')).matches(EMAIL_REG, 'The field is must email type'),
-    password: yup
-      .string()
-      .required(t('required_field'))
-      .matches(PASSWORD_REG, 'The password is contain character, special character, number')
+    email: yup.string().required(t('Required_field')).matches(EMAIL_REG, t('Rules_email')),
+    password: yup.string().required(t('Required_field')).matches(PASSWORD_REG, t('Rules_password'))
   })
   const defaultValues: TDefaultValue = {
     email: 'adminquoc@gmail.com',
@@ -85,7 +82,7 @@ const LoginPage: NextPage<TProps> = () => {
   const onSubmit = (data: { email: string; password: string }) => {
     if (!Object.keys(errors)?.length) {
       login({ ...data, rememberMe: isRemember }, err => {
-        if (err?.response?.data?.typeError === 'INVALID') toast.error(t('the_email_or_password_wrong'))
+        if (err?.response?.data?.typeError === 'INVALID') toast.error(t('The_email_or_password_wrong'))
       })
     }
 
@@ -137,7 +134,7 @@ const LoginPage: NextPage<TProps> = () => {
           }}
         >
           <Typography component='h1' variant='h5'>
-            Sign in
+            {t('Login')}
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)} autoComplete='off' noValidate>
             <Box sx={{ mt: 2, width: '300px' }}>
@@ -150,11 +147,11 @@ const LoginPage: NextPage<TProps> = () => {
                   <CustomTextField
                     required
                     fullWidth
-                    label='Email'
+                    label={t('Email')}
                     onChange={onChange}
                     onBlur={onBlur}
                     value={value}
-                    placeholder='dtquoc@gmail.com'
+                    placeholder={t('Enteremail')}
                     error={Boolean(errors?.email)}
                     helperText={errors?.email?.message}
                   />
@@ -173,11 +170,11 @@ const LoginPage: NextPage<TProps> = () => {
                   <CustomTextField
                     required
                     fullWidth
-                    label='Password'
+                    label={t('Password')}
                     onChange={onChange}
                     onBlur={onBlur}
                     value={value}
-                    placeholder='Quoc12022002&'
+                    placeholder={t('Enterpassword')}
                     error={Boolean(errors?.password)}
                     helperText={errors?.password?.message}
                     type={showPassword ? 'text' : 'password'}
@@ -210,7 +207,7 @@ const LoginPage: NextPage<TProps> = () => {
                     onChange={e => setIsRemember(e.target.checked)}
                   />
                 }
-                label='Remember me'
+                label={t('Remember_me')}
               />
               <Link
                 href='#'
@@ -218,15 +215,15 @@ const LoginPage: NextPage<TProps> = () => {
                   color: theme.palette.primary.main
                 }}
               >
-                Forgot password?
+                {t('Forgot_password?')}
               </Link>
             </Box>
 
             <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-              Sign In
+              {t('Login')}
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
-              <Typography>{"Don't have an account?"}</Typography>
+              <Typography>{t("Don't_have_an_account?")}</Typography>
 
               <Link
                 href='/register'
@@ -234,10 +231,10 @@ const LoginPage: NextPage<TProps> = () => {
                   color: theme.palette.primary.main
                 }}
               >
-                {'Register'}
+                {t('Register')}
               </Link>
             </Box>
-            <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>Or</Typography>
+            <Typography sx={{ textAlign: 'center', mt: 2, mb: 2 }}>{t('Or')}</Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
               <Icon icon='devicon:google' />
               <Icon icon='logos:facebook' />
