@@ -2,7 +2,8 @@
 import { NextPage } from 'next'
 
 // ** React
-import { use, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 // ** MUI
 import { Box, Button, IconButton, useTheme, Grid, Avatar, InputLabel, FormHelperText } from '@mui/material'
@@ -11,7 +12,8 @@ import { Box, Button, IconButton, useTheme, Grid, Avatar, InputLabel, FormHelper
 import CustomTextField from 'src/components/text-field'
 import IconifyIcon from 'src/components/Icon'
 import WrapperFileUpload from 'src/components/wrapper-file-upload'
-import FallbackSpinner from 'src/components/fall-back'
+import Spinner from 'src/components/spinner'
+import CustomSelect from 'src/components/custom-select'
 
 // ** react-hook-form
 import { useForm, Controller } from 'react-hook-form'
@@ -27,6 +29,7 @@ import { useTranslation } from 'react-i18next'
 
 // ** Services
 import { getAuthMe } from 'src/services/auth'
+import { getAllRoles } from 'src/services/role'
 
 // ** utils
 import { convertBase64, separationFullName, toFullName } from 'src/utils'
@@ -36,13 +39,6 @@ import { resetInitialState } from 'src/stores/auth'
 import { updateAuthMeAsync } from 'src/stores/auth/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from 'src/stores'
-
-// ** order
-import toast from 'react-hot-toast'
-import Spinner from 'src/components/spinner'
-import CustomSelect from 'src/components/custom-select'
-import { getAllRoles } from 'src/services/role'
-import { set } from 'nprogress'
 
 type TProps = {}
 type TDefaultValue = {
@@ -58,6 +54,7 @@ const MyProfilePage: NextPage<TProps> = () => {
   const [loading, setLoading] = useState(false)
   const [avatar, setAvatar] = useState('')
   const [optionRoles, setOptionRoles] = useState<{ label: string; value: string }[]>([])
+  const [isDisableRole, setIsDisableRole] = useState(false)
 
   // **Translate
   const { i18n } = useTranslation()
@@ -75,7 +72,7 @@ const MyProfilePage: NextPage<TProps> = () => {
     email: yup.string().required(t('Required_field')).matches(EMAIL_REG, 'The field is must email type'),
     fullName: yup.string().notRequired(),
     phoneNumber: yup.string().required(t('Required_field')).min(9, 'The phone number has a minimum of 9 digits.'),
-    role: yup.string().nullable().required(t('Required_field')),
+    role: isDisableRole ? yup.string().notRequired() : yup.string().nullable().required(t('Required_field')),
     address: yup.string().notRequired(),
     city: yup.string().notRequired()
   }) as yup.ObjectSchema<TDefaultValue>
@@ -93,7 +90,8 @@ const MyProfilePage: NextPage<TProps> = () => {
     handleSubmit,
     control,
     formState: { errors },
-    reset
+    reset,
+    watch
   } = useForm({
     defaultValues,
     mode: 'onBlur',
@@ -110,6 +108,8 @@ const MyProfilePage: NextPage<TProps> = () => {
         const data = response?.data
         console.log('response getAuthMe', { response })
         if (data) {
+          setIsDisableRole(!data?.role?.permissions?.length)
+          console.log('data.role.permissions.length', !data?.role?.permissions?.length)
           reset({
             email: data?.email,
             address: data?.address,
@@ -212,6 +212,7 @@ const MyProfilePage: NextPage<TProps> = () => {
           >
             <Box sx={{ width: '100%', height: '100%' }}>
               <Grid container spacing={4}>
+                {/* -----Grid ảnh đại diện----------  */}
                 <Grid item md={12} xs={12}>
                   <Box
                     sx={{
@@ -267,6 +268,7 @@ const MyProfilePage: NextPage<TProps> = () => {
                     </WrapperFileUpload>
                   </Box>
                 </Grid>
+                {/* -----Grid Email----------  */}
                 <Grid item md={6} xs={12}>
                   <Controller
                     control={control}
@@ -290,50 +292,53 @@ const MyProfilePage: NextPage<TProps> = () => {
                     name='email'
                   />
                 </Grid>
+                {/* -----Grid Role----------  */}
                 <Grid item md={6} xs={12}>
-                  <Controller
-                    control={control}
-                    rules={{
-                      required: true
-                    }}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <InputLabel
-                          sx={{
-                            marginBottom: '2px',
-                            fontSize: '13px',
-                            color: errors?.role
-                              ? theme.palette.error.main
-                              : `rgba(${theme.palette.customColors.main},0.42)`
-                          }}
-                        >
-                          {t('Role')}
-                        </InputLabel>
-                        <CustomSelect
-                          fullWidth
-                          onChange={onChange}
-                          value={typeof value === 'string' ? value : ''}
-                          options={optionRoles}
-                          error={Boolean(errors?.role)}
-                          onBlur={onBlur}
-                          placeholder={t('Enteryour_role')}
-                        />
-                        {!errors?.role?.message && (
-                          <FormHelperText
+                  {!isDisableRole && (
+                    <Controller
+                      control={control}
+                      rules={{
+                        required: true
+                      }}
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                          <InputLabel
                             sx={{
+                              marginBottom: '2px',
+                              fontSize: '13px',
                               color: errors?.role
                                 ? theme.palette.error.main
                                 : `rgba(${theme.palette.customColors.main},0.42)`
                             }}
-                            id='my-helper-text'
                           >
-                            {errors?.role?.message}
-                          </FormHelperText>
-                        )}
-                      </Box>
-                    )}
-                    name='role'
-                  />
+                            {t('Role')}
+                          </InputLabel>
+                          <CustomSelect
+                            fullWidth
+                            onChange={onChange}
+                            value={typeof value === 'string' ? value : ''}
+                            options={optionRoles}
+                            error={Boolean(errors?.role)}
+                            onBlur={onBlur}
+                            placeholder={t('Enteryour_role')}
+                          />
+                          {!errors?.role?.message && (
+                            <FormHelperText
+                              sx={{
+                                color: errors?.role
+                                  ? theme.palette.error.main
+                                  : `rgba(${theme.palette.customColors.main},0.42)`
+                              }}
+                              id='my-helper-text'
+                            >
+                              {errors?.role?.message}
+                            </FormHelperText>
+                          )}
+                        </Box>
+                      )}
+                      name='role'
+                    />
+                  )}
                 </Grid>
               </Grid>
             </Box>

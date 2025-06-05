@@ -24,6 +24,7 @@ import { useRouter } from 'next/router'
 
 // ** configs
 import { ROUTE_CONFIG } from 'src/configs/route'
+import { useTranslation } from 'react-i18next'
 
 const drawerWidth: number = 240
 
@@ -56,6 +57,7 @@ const AppBar = styled(MuiAppBar, {
 const HorizontalLayout: NextPage<TProps> = ({ open, toggleDrawer, isHideMenu }) => {
   const { user } = useAuth()
   const router = useRouter()
+  const { t } = useTranslation()
 
   return (
     <AppBar position='absolute' open={open}>
@@ -88,7 +90,7 @@ const HorizontalLayout: NextPage<TProps> = ({ open, toggleDrawer, isHideMenu }) 
           <UserDropDown />
         ) : (
           <Button variant='contained' sx={{ width: 'auto', ml: 2 }} onClick={() => router.push(ROUTE_CONFIG.LOGIN)}>
-            Sign In
+            {t('Login')}
           </Button>
         )}
       </Toolbar>
